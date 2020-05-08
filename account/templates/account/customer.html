@@ -13,7 +13,7 @@
 		</div>
 	</div>
 
-	<div class="col-md-4 mb-3">
+	<div class="col-md-4 mb-3"> 
 		<div class="card card-body">
 			<h5>Total Orders</h5>
 			<hr>
@@ -25,8 +25,8 @@
 		<div class="card card-body">
 			<h5>Actions</h5>
 			<hr>
+			<a class="btn btn-outline-primary btn-sm btn-block" href="{% url 'account_create_order' customer.id %}">New order</a>
 			<a class="btn btn-outline-warning btn-sm btn-block" href="">Update Customer</a>
-			<a class="btn btn-outline-danger btn-sm btn-block" href="">Delete Customer</a>
 		</div>
 	</div>
 </div>
@@ -37,6 +37,8 @@
 	<div class="col">
 		<div class="card card-body">
 			<form method="get">
+
+			{{ filter.form }}
 
 		    <button class="btn btn-primary" type="submit">Search</button>
 		  </form>
@@ -52,7 +54,7 @@
 			<table class="table table-sm">
 				<tr>
 					<th>Product</th>
-					<th>Category</th>
+					<th>Note</th>
 					<th>Date Ordered</th>
 					<th>Status</th>
 					<th>Actions</th>
@@ -62,7 +64,7 @@
 				{% for order in orders %}
 					<tr>
                         <td>{{order.product.name}}</td>
-                        <td>{{order.product.category}}</td>
+                        <td>{{order.note}}</td>
 						<td>{{order.date_created}}</td>
                         <td>{{order.status}}</td>
                         <td><a class="btn btn-outline-warning btn-block btn-sm" href="{% url 'account_update_order' order.id %}">Update</button></td>

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Order, Customer, Product
 from .forms import OrderForm
+from .filters import OrderFilter
 
 
 def home(request):
@@ -33,19 +34,22 @@ def customer(request, customer_pk):
     customer = Customer.objects.get(id=customer_pk)
 
     orders = customer.order_set.all()
-
     total_orders = orders.count()
 
-    context = {'customer': customer, 'orders': orders, 'total_orders': total_orders}
+    filter = OrderFilter(request.GET, queryset=orders)
+    orders_filtered = filter.qs
+
+    context = {'customer': customer, 'orders': orders_filtered, 'total_orders': total_orders, 'filter': filter}
 
     return render(request, 'account/customer.html', context)
 
 
-def create_order(request):
-    form = OrderForm()  
+def create_order(request, customer_pk):
+    customer = Customer.objects.get(id=customer_pk)
+    form = OrderForm(initial={'customer': customer})  
 
     if request.method == 'POST':
-        form = OrderForm(request.POST) 
+        form = OrderForm(request.POST, initial={'customer': customer})
 
         if form.is_valid():
             form.save()
