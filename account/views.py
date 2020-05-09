@@ -24,10 +24,27 @@ def home(request):
     return render(request, 'account/dashboard.html', context)
 
 
-def products(request):
+def all_products(request):
     products = Product.objects.all()
 
-    return render(request, 'account/products.html', {'products': products})
+    return render(request, 'account/all_products.html', {'products': products})
+
+
+def all_customers(request):
+    customers = Customer.objects.all()
+
+    return render(request, 'account/all_customers.html', {'customers': customers})
+
+
+def all_orders(request):
+    orders = Order.objects.all()
+
+    filter = OrderFilter(request.GET, queryset=orders)
+    orders_filtered = filter.qs
+
+    context = {'orders': orders_filtered, 'filter': filter}
+
+    return render(request, 'account/all_orders.html', context)
 
 
 def customer(request, customer_pk):

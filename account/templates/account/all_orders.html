@@ -1,0 +1,52 @@
+{% extends 'account/main.html' %}
+
+{% block content %}
+
+<br>
+    <div class="row">
+        <div class="col-md">
+            <br>
+            <div class="card card-body">
+                <h3>Orders</h3>
+            </div>
+            <br>
+            <div class="card card-body">
+                <form method="get">
+
+                {{ filter.form }}
+
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+            </div>
+
+            <br>
+            <div class="card card-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Note</th>
+                            <th colspan="2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{order.customer}}</td>
+                                <td>{{order.product}}</td>
+                                <td>{{order.status}}</td>
+                                <td>{{order.date_created}}</td>
+                                <td>{{order.note}}</td>
+                                <td><a class="btn btn-outline-warning btn-block btn-sm" href="{% url 'account_update_order' order.id %}">Update</button></td>
+                                <td><a class="btn btn-outline-danger btn-block btn-sm" href="{% url 'account_delete_order' order.id %}">Delete</button></td>    
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

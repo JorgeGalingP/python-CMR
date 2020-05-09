@@ -44,21 +44,19 @@
 		  </form>
 		</div>
 	</div>
-	
 </div>
 <br>
 
 <div class="row">
 	<div class="col-md">
 		<div class="card card-body">
-			<table class="table table-sm">
+			<table class="table table-sm table-bordered table-hover">
 				<tr>
 					<th>Product</th>
 					<th>Note</th>
 					<th>Date Ordered</th>
 					<th>Status</th>
-					<th>Actions</th>
-                    <th></th>
+					<th colspan="2">Actions</th>
 				</tr>
 
 				{% for order in orders %}

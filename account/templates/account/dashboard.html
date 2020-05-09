@@ -13,7 +13,7 @@
         <div class="card card-body">
             <a class="btn btn-primary btn-sm btn-block" href="">Create Customer</a>
             <br>
-            <table class="table table-sm">
+            <table class="table table-sm table-bordered table-hover">
                 <tr>
                     <th>Customer</th>
                     <th>Email</th>
@@ -37,15 +37,14 @@
         <h5>LAST 5 ORDERS</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="#">View all orders</a>
+            <a class="btn btn-primary btn-sm btn-block" href="#">Create Order</a>
             <br>
-            <table class="table table-sm">
+            <table class="table table-sm table-bordered table-hover">
                 <tr>
                     <th>Product</th>
                     <th>Date Ordered</th>
                     <th>Status</th>
-                    <th>Actions</th>
-                    <th></th>
+                    <th colspan="2">Actions</th>
                 </tr>
 
                 {% for order in orders %}
