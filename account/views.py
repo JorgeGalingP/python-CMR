@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 from .models import Order, Customer, Product
 from .forms import OrderForm
 from .filters import OrderFilter
@@ -42,7 +43,11 @@ def all_orders(request):
     filter = OrderFilter(request.GET, queryset=orders)
     orders_filtered = filter.qs
 
-    context = {'orders': orders_filtered, 'filter': filter}
+    paginator = Paginator(orders_filtered, 10)
+    page = request.GET.get('page')
+    orders_paginated = paginator.get_page(page)
+
+    context = {'orders': orders_paginated, 'filter': filter}
 
     return render(request, 'account/all_orders.html', context)
 
