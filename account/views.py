@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator
 from .models import Order, Customer, Product
 from .forms import OrderForm
-from .filters import OrderFilter
+from .filters import OrderFilter, CustomerFilter
 
 
 def home(request):
@@ -34,7 +34,10 @@ def all_products(request):
 def all_customers(request):
     customers = Customer.objects.all()
 
-    return render(request, 'account/all_customers.html', {'customers': customers})
+    filter = CustomerFilter(request.GET, queryset=customers)
+    customers_filtered = filter.qs
+
+    return render(request, 'account/all_customers.html', {'customers': customers_filtered, 'filter': filter})
 
 
 def all_orders(request):
