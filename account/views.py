@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+
 from .models import Order, Customer, Product
 from .forms import OrderForm
 from .filters import OrderFilter, CustomerFilter
@@ -23,6 +25,19 @@ def home(request):
         'pending': pending}
 
     return render(request, 'account/dashboard.html', context)
+
+
+def login(request):
+    context = {}
+
+    return render(request, 'account/login.html', context)
+
+
+def register(request):
+    form = UserCreationForm()
+    context = {'form': form}
+
+    return render(request, 'account/register.html', context)
 
 
 def all_products(request):
