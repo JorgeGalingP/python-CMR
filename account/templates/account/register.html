@@ -1,8 +1,54 @@
-<h3>Register</h3>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CMR</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+            crossorigin="anonymous">
 
-<form method="POST" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
+        <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
 
-    <input type="submit" name="Create User">
-</form>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <h3>Register</h3>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card card-body"> 
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label for="Username1">{{ form.username.label }}</label>
+                                <p class="form-control">{{ form.username }}</p>
+                                <small class="form-text text-muted">{{ form.username.help_text }} </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="Email1">{{ form.email.label }}</label>
+                                <p class="form-control">{{ form.email }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="Password1">{{ form.password1.label }}</label>
+                                <p class="form-control">{{ form.password1 }}</p>
+                                <small class="form-text text-muted">{{ form.password1.help_text }} </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="Password2">{{ form.password2.label }}</label>
+                                <p class="form-control">{{ form.password2 }}</p>
+                                <small class="form-text text-muted">{{ form.password2.help_text }} </small>
+                            </div>
+
+                            <input class="btn btn-primary btn-block btn-sm" type="submit" name="Submit" value="Create User">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
