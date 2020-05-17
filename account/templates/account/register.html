@@ -21,23 +21,23 @@
                             {% csrf_token %}
 
                             <div class="form-group">
-                                <label for="Username1">{{ form.username.label }}</label>
-                                <p class="form-control">{{ form.username }}</p>
-                                <small class="form-text text-muted">{{ form.username.help_text }} </small>
+                                <label>{{ form.username.label }}</label>
+                                {{ form.username }}
+                                <small class="form-text text-muted">{{ form.username.help_text }}</small>
                             </div>
                             <div class="form-group">
-                                <label for="Email1">{{ form.email.label }}</label>
-                                <p class="form-control">{{ form.email }}</p>
+                                <label>{{ form.email.label }}</label>
+                                {{ form.email }}
                             </div>
                             <div class="form-group">
-                                <label for="Password1">{{ form.password1.label }}</label>
-                                <p class="form-control">{{ form.password1 }}</p>
-                                <small class="form-text text-muted">{{ form.password1.help_text }} </small>
+                                <label>{{ form.password1.label }}</label>
+                                {{ form.password1 }}
+                                <small class="form-text text-muted">{{ form.password1.help_text }}</small>
                             </div>
                             <div class="form-group">
-                                <label for="Password2">{{ form.password2.label }}</label>
-                                <p class="form-control">{{ form.password2 }}</p>
-                                <small class="form-text text-muted">{{ form.password2.help_text }} </small>
+                                <label>{{ form.password2.label }}</label>
+                                {{ form.password2 }}
+                                <small class="form-text text-muted">{{ form.password2.help_text }}</small>
                             </div>
 
                             <input class="btn btn-primary btn-block btn-sm" type="submit" name="Submit" value="Create User">
