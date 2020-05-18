@@ -10,12 +10,13 @@
             <form method="POST">
                 {% csrf_token %}
 
+                {{ form.non_field_errors }}
                 {% for field in form.visible_fields %}
                 <div class="form-group">
                     <label>{{field.name}}</label>
-                    <p class="form-control">{{ field }}</p>
+                    {{ field }}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
                 </div>
-                <p class="help-text">{{ field.help_text }} </p>
                 {% endfor %}
 
                 <input class="btn btn-primary btn-block btn-sm" type="submit" name="Submit" value="Accept">

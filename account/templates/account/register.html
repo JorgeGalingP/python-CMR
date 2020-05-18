@@ -20,23 +20,28 @@
                         <form method="POST">
                             {% csrf_token %}
 
+                            {{ form.non_field_errors }}
                             <div class="form-group">
                                 <label>{{ form.username.label }}</label>
                                 {{ form.username }}
+                                {{ form.username.errors }}
                                 <small class="form-text text-muted">{{ form.username.help_text }}</small>
                             </div>
                             <div class="form-group">
                                 <label>{{ form.email.label }}</label>
                                 {{ form.email }}
+                                {{ form.email.errors }}
                             </div>
                             <div class="form-group">
                                 <label>{{ form.password1.label }}</label>
                                 {{ form.password1 }}
+                                {{ form.password1.errors }}
                                 <small class="form-text text-muted">{{ form.password1.help_text }}</small>
                             </div>
                             <div class="form-group">
                                 <label>{{ form.password2.label }}</label>
                                 {{ form.password2 }}
+                                {{ form.password2.errors }}
                                 <small class="form-text text-muted">{{ form.password2.help_text }}</small>
                             </div>
 
