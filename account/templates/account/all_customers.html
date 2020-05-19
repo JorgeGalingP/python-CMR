@@ -1,11 +1,9 @@
 {% extends 'account/main.html' %}
 
 {% block content %}
-
 <br>
     <div class="row">
         <div class="col-md">
-            <br>
             <div class="card card-body">
                 <h3>Customers</h3>
             </div>
@@ -14,7 +12,8 @@
                 <form method="get">
 
                 {{ filter.form }}
-
+                
+                <br>
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
             </div>

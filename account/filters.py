@@ -1,14 +1,34 @@
 import django_filters
-from django_filters import DateFilter, CharFilter
 
-from .models import Order, Customer
+from django import forms
+from django_filters import filters #DateFilter, CharFilter, ChoiceFilter
+
+from .models import Order, Customer, Product
 
 class OrderFilter(django_filters.FilterSet):
-    start_date = DateFilter(field_name='date_created', lookup_expr='gte', label='Starts at')
-    end_date = DateFilter(field_name='date_created', lookup_expr='lte', label='ends at')
+    product = filters.ModelChoiceFilter(
+                        queryset=Product.objects.all(),
+                        empty_label="Search by product...",
+                        widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
+    status = filters.ChoiceFilter(
+                        choices=Order.STATUS,
+                        empty_label="Search by order's status...",
+                        widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
+    note = filters.CharFilter(
+                        field_name='note', 
+                        lookup_expr='icontains', 
+                        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm'}))
+    start_date = filters.DateFilter(
+                        field_name='date_created', 
+                        lookup_expr='gte', 
+                        label='Starts at', 
+                        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm'}))
+    end_date = filters.DateFilter(
+                        field_name='date_created', 
+                        lookup_expr='lte', 
+                        label='ends at', 
+                        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm'}))
     
-    note = CharFilter(field_name='note', lookup_expr='icontains')
-
     class Meta:
         model = Order
         fields = '__all__'
@@ -16,7 +36,10 @@ class OrderFilter(django_filters.FilterSet):
 
 
 class CustomerFilter(django_filters.FilterSet):
-    email = CharFilter(field_name='email', lookup_expr='icontains')
+    email = filters.CharFilter(
+                        field_name='email', 
+                        lookup_expr='icontains',
+                        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm'}))
 
     class Meta:
         model = Customer
