@@ -5,39 +5,43 @@ from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
 
+from django.contrib.auth.decorators import login_required
+
 from .models import Order, Customer, Product, Video
 from .forms import OrderForm, CreateUserForm, AuthenticationAccountForm
 from .filters import OrderFilter, CustomerFilter
 
 
 def login_page(request):
-    form = AuthenticationAccountForm()
-    err = False
-    context = {'form': form}
+    if request.user.is_authenticated:
+        return redirect('account_home')
+    else:
+        form = AuthenticationAccountForm()
+        err = False
+        context = {'form': form}
 
-    if request.method == 'POST':
-        form = AuthenticationAccountForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
+        if request.method == 'POST':
+            form = AuthenticationAccountForm(data=request.POST)
+            if form.is_valid():
+                username = request.POST['username']
+                password = request.POST['password']
 
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:
-                login(request, user)
-                return redirect('account_home')
-            else:
-                err = True
-                messages.info(request, 'Username or password is incorrect')
-        else:
-                err = True
-                messages.info(request, 'Username or password is invalid')
+                user = authenticate(request, username=username, password=password)
                 
+                if user is not None:
+                    login(request, user)
+                    return redirect('account_home')
+                else:
+                    err = True
+                    messages.info(request, 'Username or password is incorrect')
+            else:
+                    err = True
+                    messages.info(request, 'Username or password is invalid')
 
-    if err:
+        if err:
+            return render(request, 'account/login.html', context)
+
         return render(request, 'account/login.html', context)
-
-    return render(request, 'account/login.html', context)
 
 
 def logout_page(request):
@@ -46,22 +50,25 @@ def logout_page(request):
 
 
 def register_page(request):
-    form = CreateUserForm()
-    
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, 'Your account was created ', username)
+    if request.user.is_authenticated:
+        return redirect('account_home')
+    else:
+        form = CreateUserForm()
+        
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Your account was created ', username)
 
-            return redirect('account_login')
+                return redirect('account_login')
 
-    context = {'form': form}
+        context = {'form': form}
 
-    return render(request, 'account/register.html', context)
+        return render(request, 'account/register.html', context)
 
-
+@login_required(login_url='account_login')
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -81,6 +88,7 @@ def home(request):
     return render(request, 'account/dashboard.html', context)
 
 
+@login_required(login_url='account_login')
 def all_products(request):
     products = Product.objects.all()
 
@@ -88,7 +96,7 @@ def all_products(request):
 
     return render(request, 'account/all_products.html', context)
 
-
+@login_required(login_url='account_login')
 def all_customers(request):
     customers = Customer.objects.all()
 
@@ -99,7 +107,7 @@ def all_customers(request):
 
     return render(request, 'account/all_customers.html', context)
 
-
+@login_required(login_url='account_login')
 def all_videos(request):
     videos = Video.objects.all()
 
@@ -107,7 +115,7 @@ def all_videos(request):
 
     return render(request, 'account/all_videos.html', context)
 
-
+@login_required(login_url='account_login')
 def all_orders(request):
     orders = Order.objects.all()
 
@@ -123,6 +131,7 @@ def all_orders(request):
     return render(request, 'account/all_orders.html', context)
 
 
+@login_required(login_url='account_login')
 def customer(request, customer_pk):
     customer = Customer.objects.get(id=customer_pk)
 
@@ -137,6 +146,7 @@ def customer(request, customer_pk):
     return render(request, 'account/customer.html', context)
 
 
+@login_required(login_url='account_login')
 def create_order(request, customer_pk):
     customer = Customer.objects.get(id=customer_pk)
     form = OrderForm(initial={'customer': customer})  
@@ -152,6 +162,7 @@ def create_order(request, customer_pk):
     return render(request, 'account/order_form.html', context)
 
 
+@login_required(login_url='account_login')
 def update_order(request, order_pk):
     order = Order.objects.get(id=order_pk)
     form = OrderForm(instance=order)
@@ -167,6 +178,7 @@ def update_order(request, order_pk):
     return render(request, 'account/order_form.html', context) 
 
 
+@login_required(login_url='account_login')
 def delete_order(request, order_pk):
     order = Order.objects.get(id=order_pk)
     
