@@ -27,4 +27,7 @@
       </ul>
       {% endwith %}
     </div>
+
+    <span class="text-light mr-3">Welcome back, {{ request.user }}</span>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'account_logout' %}">Logout</a>
   </nav>

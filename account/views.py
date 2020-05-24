@@ -1,27 +1,61 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
+from django.contrib.auth import authenticate, login, logout
 
 from .models import Order, Customer, Product, Video
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, AuthenticationAccountForm
 from .filters import OrderFilter, CustomerFilter
 
 
-def login(request):
-    context = {}
+def login_page(request):
+    form = AuthenticationAccountForm()
+    err = False
+    context = {'form': form}
+
+    if request.method == 'POST':
+        form = AuthenticationAccountForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                login(request, user)
+                return redirect('account_home')
+            else:
+                err = True
+                messages.info(request, 'Username or password is incorrect')
+        else:
+                err = True
+                messages.info(request, 'Username or password is invalid')
+                
+
+    if err:
+        return render(request, 'account/login.html', context)
 
     return render(request, 'account/login.html', context)
 
 
-def register(request):
+def logout_page(request):
+    logout(request)
+    return redirect('account_login')
+
+
+def register_page(request):
     form = CreateUserForm()
     
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Your account was created ', username)
+
+            return redirect('account_login')
 
     context = {'form': form}
 
@@ -112,7 +146,7 @@ def create_order(request, customer_pk):
 
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('account_home')
 
     context = {'form': form}
     return render(request, 'account/order_form.html', context)
@@ -127,7 +161,7 @@ def update_order(request, order_pk):
 
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('account_home')
 
     context = {'form': form}
     return render(request, 'account/order_form.html', context) 
@@ -138,7 +172,7 @@ def delete_order(request, order_pk):
     
     if request.method == 'POST':
         order.delete()
-        return redirect('/')
+        return redirect('account_home')
 
     context = {'item': order}
     return render(request, 'account/delete.html', context)
