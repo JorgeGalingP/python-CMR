@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Order, Customer, Product
+from .models import Order, Customer, Product, Video
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter, CustomerFilter
 
@@ -16,6 +16,7 @@ def login(request):
 
 def register(request):
     form = CreateUserForm()
+    
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -49,7 +50,9 @@ def home(request):
 def all_products(request):
     products = Product.objects.all()
 
-    return render(request, 'account/all_products.html', {'products': products})
+    context = {'products': products}
+
+    return render(request, 'account/all_products.html', context)
 
 
 def all_customers(request):
@@ -58,7 +61,17 @@ def all_customers(request):
     filter = CustomerFilter(request.GET, queryset=customers)
     customers_filtered = filter.qs
 
-    return render(request, 'account/all_customers.html', {'customers': customers_filtered, 'filter': filter})
+    context = {'customers': customers_filtered, 'filter': filter}
+
+    return render(request, 'account/all_customers.html', context)
+
+
+def all_videos(request):
+    videos = Video.objects.all()
+
+    context = {'videos': videos}
+
+    return render(request, 'account/all_videos.html', context)
 
 
 def all_orders(request):

@@ -51,3 +51,23 @@ class Order(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class Video(models.Model):
+    CATEGORY = (
+        ('Tutorials', 'Tutorials'),
+        ('Challenges', 'Challenges'),
+        ('Tips', 'Tips'),
+        ('Short', 'Short'),
+        ('Long', 'Long'),
+    )
+    
+    name = models.CharField(max_length=100, null=True)
+    code = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=200, null=True, default='')
+    category =  models.CharField(max_length=100, null=True, choices=CATEGORY)
+    featured = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.name

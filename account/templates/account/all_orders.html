@@ -36,7 +36,7 @@
                                 <td>{{order.customer}}</td>
                                 <td>{{order.product}}</td>
                                 <td>{{order.status}}</td>
-                                <td>{{order.date_created}}</td>
+                                <td>{{order.date_created|date:"d/m/Y, H:i:s"}}</td>
                                 <td>{{order.note}}</td>
                                 <td><a class="btn btn-outline-warning btn-block btn-sm" href="{% url 'account_update_order' order.id %}">Update</button></td>
                                 <td><a class="btn btn-outline-danger btn-block btn-sm" href="{% url 'account_delete_order' order.id %}">Delete</button></td>    

@@ -35,7 +35,7 @@
                                 <td>{{customer.name}}</td>
                                 <td>{{customer.phone}}</td>
                                 <td>{{customer.email}}</td>
-                                <td>{{customer.date_created}}</td>
+                                <td>{{customer.date_created|date:"d/m/Y, H:i:s"}}</td>
                                 <td><a role="button" class="btn btn-info btn-block btn-sm"
                                     href="{% url 'account_customer' customer.id %}">View</a>
                                 </td>

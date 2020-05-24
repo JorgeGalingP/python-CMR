@@ -11,6 +11,8 @@ urlpatterns = [
     path('customers/', views.all_customers, name="account_customers"),
     
     path('products/', views.all_products, name="account_products"),
+
+    path('videos/', views.all_videos, name="account_videos"),
     
     path('orders/', views.all_orders, name="account_orders"),
     path('createOrder/<str:customer_pk>', views.create_order, name="account_create_order"),

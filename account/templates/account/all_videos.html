@@ -1,0 +1,36 @@
+{% extends 'account/main.html' %}
+
+{% block content %}
+
+<div class="row">
+    {% for video in videos %}
+        {% if forloop.counter0|divisibleby:3 %}
+        </div><br><div class="row">
+        {% endif %}
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    {{ video.category }}
+                </div>
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{video.name}}</h5>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{video.code}}" allowfullscreen></iframe>
+                    </div>
+                    <br>
+                    <p class="card-text">{{ video.description }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">{{ video.date_created|date:"d/m/Y, H:i:s" }}</small>
+                        {% if video.featured %}<span class="badge badge-pill badge-primary">Featured</span>{% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<br>
+
+{% endblock %}
