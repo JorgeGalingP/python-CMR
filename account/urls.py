@@ -1,12 +1,12 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [
-    path('', views.home, name="account_home"),
-    
+urlpatterns = [    
     path('login/', views.login_page, name="account_login"),
     path('logout/', views.logout_page, name="account_logout"),
     path('register/', views.register_page, name="account_register"),
+
+    path('', views.home, name="account_home"),
     
     path('customer/<str:customer_pk>', views.customer, name="account_customer"),
     path('customers/', views.all_customers, name="account_customers"),
