@@ -10,38 +10,34 @@ from django.contrib.auth.decorators import login_required
 from .models import Order, Customer, Product, Video
 from .forms import OrderForm, CreateUserForm, AuthenticationAccountForm
 from .filters import OrderFilter, CustomerFilter
+from .decorators import unauthenticated_user
 
 
+@unauthenticated_user
 def login_page(request):
-    if request.user.is_authenticated:
-        return redirect('account_home')
-    else:
-        form = AuthenticationAccountForm()
-        err = False
-        context = {'form': form}
+    form = AuthenticationAccountForm()
+    context = {'form': form}
 
-        if request.method == 'POST':
-            form = AuthenticationAccountForm(data=request.POST)
-            if form.is_valid():
-                username = request.POST['username']
-                password = request.POST['password']
+    if request.method == 'POST':
+        form = AuthenticationAccountForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
 
-                user = authenticate(request, username=username, password=password)
-                
-                if user is not None:
-                    login(request, user)
-                    return redirect('account_home')
-                else:
-                    err = True
-                    messages.info(request, 'Username or password is incorrect')
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                login(request, user)
+
+                next_param = request.GET.get('next')
+                if next_param:
+                    return redirect(request.GET['next'])
+                    
+                return redirect('account_home')
             else:
-                    err = True
-                    messages.info(request, 'Username or password is invalid')
+                messages.info(request, 'Username or password is incorrect')
 
-        if err:
-            return render(request, 'account/login.html', context)
-
-        return render(request, 'account/login.html', context)
+    return render(request, 'account/login.html', context)
 
 
 def logout_page(request):
@@ -49,24 +45,21 @@ def logout_page(request):
     return redirect('account_login')
 
 
+@unauthenticated_user
 def register_page(request):
-    if request.user.is_authenticated:
-        return redirect('account_home')
-    else:
-        form = CreateUserForm()
-        
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                username = form.cleaned_data.get('username')
-                messages.success(request, 'Your account was created ', username)
+    form = CreateUserForm()
+    context = {'form': form}
+    
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Your account was created ', username)
 
-                return redirect('account_login')
+            return redirect('account_login')
 
-        context = {'form': form}
-
-        return render(request, 'account/register.html', context)
+    return render(request, 'account/register.html', context)
 
 @login_required(login_url='account_login')
 def home(request):
@@ -129,6 +122,13 @@ def all_orders(request):
     context = {'orders': orders_paginated, 'filter': filter}
 
     return render(request, 'account/all_orders.html', context)
+
+
+@login_required(login_url='account_user')
+def user(request):
+    context = {}
+
+    return render(request, 'account/user.html', context)
 
 
 @login_required(login_url='account_login')
