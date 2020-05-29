@@ -1,8 +1,9 @@
 import django_filters
 
 from django import forms
-from django_filters import filters #DateFilter, CharFilter, ChoiceFilter
+from django_filters import filters
 
+from django.contrib.auth.models import User
 from .models import Order, Customer, Product
 
 class OrderFilter(django_filters.FilterSet):
@@ -36,6 +37,10 @@ class OrderFilter(django_filters.FilterSet):
 
 
 class CustomerFilter(django_filters.FilterSet):
+    user = filters.ModelChoiceFilter(
+                        queryset=User.objects.all(),
+                        empty_label="Search by an user...",
+                        widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
     email = filters.CharFilter(
                         field_name='email', 
                         lookup_expr='icontains',
