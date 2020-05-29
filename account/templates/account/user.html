@@ -6,6 +6,32 @@
 
 <br>
 
-<h3>User Profile</h3>
+<div class="row">
+	<div class="col-md">
+        <div class="card card-body">
+            <h3>{{ username }}'s profile</h3>
+        </div>
+        <br>
+		<div class="card card-body">
+			<table class="table table-sm table-bordered table-hover">
+				<tr>
+					<th>Product</th>
+					<th>Note</th>
+					<th>Date Ordered</th>
+					<th>Status</th>
+				</tr>
+
+				{% for order in orders %}
+					<tr>
+                        <td>{{order.product.name}}</td>
+                        <td>{{order.note}}</td>
+						<td>{{order.date_created}}</td>
+                        <td>{{order.status}}</td>
+                    </tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
 
 {% endblock content %}

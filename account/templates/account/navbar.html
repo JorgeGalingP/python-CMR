@@ -9,6 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       {% with url_name=request.resolver_match.url_name %}
       <ul class="navbar-nav">
+        {% if request.user.is_staff %}
         <li class="nav-item {% if url_name == 'account_home' %}active{% endif %}">
           <a class="nav-link" href="{% url 'account_home' %}">Dashboard</a>
         </li>
@@ -24,6 +25,7 @@
         <li class="nav-item {% if url_name == 'account_videos' %}active{% endif %}">
           <a class="nav-link" href="{% url 'account_videos' %}">Videos</a>
         </li>
+        {% endif %}
       </ul>
       {% endwith %}
     </div>

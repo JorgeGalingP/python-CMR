@@ -6,11 +6,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 from .models import Order, Customer, Product, Video
 from .forms import OrderForm, CreateUserForm, AuthenticationAccountForm
 from .filters import OrderFilter, CustomerFilter
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 
 @unauthenticated_user
@@ -40,6 +41,7 @@ def login_page(request):
     return render(request, 'account/login.html', context)
 
 
+@login_required(login_url='account_login')
 def logout_page(request):
     logout(request)
     return redirect('account_login')
@@ -53,15 +55,22 @@ def register_page(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
+
+            # add user to customer group
+            group = Group.objects.get(name='customer')
+            user.groups.add(group)
+
             messages.success(request, 'Your account was created ', username)
 
             return redirect('account_login')
 
     return render(request, 'account/register.html', context)
 
+
 @login_required(login_url='account_login')
+@admin_only
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -82,6 +91,7 @@ def home(request):
 
 
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def all_products(request):
     products = Product.objects.all()
 
@@ -89,7 +99,9 @@ def all_products(request):
 
     return render(request, 'account/all_products.html', context)
 
+
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def all_customers(request):
     customers = Customer.objects.all()
 
@@ -100,7 +112,9 @@ def all_customers(request):
 
     return render(request, 'account/all_customers.html', context)
 
+
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def all_videos(request):
     videos = Video.objects.all()
 
@@ -108,7 +122,9 @@ def all_videos(request):
 
     return render(request, 'account/all_videos.html', context)
 
+
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def all_orders(request):
     orders = Order.objects.all()
 
@@ -125,13 +141,24 @@ def all_orders(request):
 
 
 @login_required(login_url='account_user')
+@allowed_users(allowed_roles=['customer'])
 def user(request):
-    context = {}
+    orders = request.user.customer.order_set.all()
+    total_orders = orders.count()
+    delivered = orders.filter(status='Delivered').count()
+    pending = orders.filter(status='Pending').count()
+
+    context = {'orders': orders, 
+        'username': request.user,
+        'total_orders': total_orders,
+        'delivered': delivered,
+        'pending': pending}
 
     return render(request, 'account/user.html', context)
 
 
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin', 'customer'])
 def customer(request, customer_pk):
     customer = Customer.objects.get(id=customer_pk)
 
@@ -147,6 +174,7 @@ def customer(request, customer_pk):
 
 
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def create_order(request, customer_pk):
     customer = Customer.objects.get(id=customer_pk)
     form = OrderForm(initial={'customer': customer})  
@@ -163,6 +191,7 @@ def create_order(request, customer_pk):
 
 
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def update_order(request, order_pk):
     order = Order.objects.get(id=order_pk)
     form = OrderForm(instance=order)
@@ -179,6 +208,7 @@ def update_order(request, order_pk):
 
 
 @login_required(login_url='account_login')
+@allowed_users(allowed_roles=['admin'])
 def delete_order(request, order_pk):
     order = Order.objects.get(id=order_pk)
     
