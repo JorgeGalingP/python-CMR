@@ -1,0 +1,41 @@
+{% extends 'account/main.html' %}
+
+{% block content %}
+
+<br>
+
+<div class="row">
+    <div class = "col-md-3">
+        <div class="card card-body">
+            <h3 class="text-left">Your image</h3>
+            <hr>
+            <img src="{{ customer.profile_pic.url }}" height="200px" width="200px" class="rounded-circle mx-auto d-block" alt="UserImage">
+            <hr>
+            <a class="btn btn-warning btn-block btn-sm" href="{% url 'account_user' %}">
+                <span class="fas fa-arrow-left"></span> Back to main page
+            </a>
+        </div>
+    </div>
+    <div class = "col-md-9">
+		<div class="card card-body"> 
+            <form method="POST" enctype="multipart/form-data">
+                <h3 class="text-left">Account settings</h3>
+                <hr>
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+                {% for field in form.visible_fields %}
+                <div class="form-group">
+                    <label>{{field.name}}</label>
+                    {{ field }}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                </div>
+                {% endfor %}
+
+                <input class="btn btn-primary btn-block btn-sm" type="submit" name="Submit" value="Update">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

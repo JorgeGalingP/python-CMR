@@ -49,4 +49,4 @@ class CustomerFilter(django_filters.FilterSet):
     class Meta:
         model = Customer
         fields = '__all__'
-        exclude=['name', 'phone', 'date_created']
+        exclude=['name', 'phone', 'profile_pic', 'date_created']
