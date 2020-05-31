@@ -73,6 +73,9 @@ class CreateUserForm(UserCreationForm):
                         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Repeat your password'}),
                         help_text='Enter the same password as before, for verification.')
 
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -85,6 +88,9 @@ class AuthenticationAccountForm(AuthenticationForm):
     password = forms.CharField(
                         label = ('Password'),
                         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'}))    
+
+    def __init__(self, *args, **kwargs):
+        super(AuthenticationAccountForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = User

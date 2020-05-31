@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 
 from .models import Order, Customer, Product, Video
 from .forms import OrderForm, CustomerForm, CreateUserForm, AuthenticationAccountForm
@@ -17,7 +16,6 @@ from .decorators import unauthenticated_user, allowed_users, admin_only
 @unauthenticated_user
 def login_page(request):
     form = AuthenticationAccountForm()
-    context = {'form': form}
 
     if request.method == 'POST':
         form = AuthenticationAccountForm(data=request.POST)
@@ -37,6 +35,8 @@ def login_page(request):
                 return redirect('account_home')
             else:
                 messages.info(request, 'Username or password is incorrect')
+    
+    context = {'form': form}
 
     return render(request, 'account/login.html', context)
 
@@ -50,7 +50,6 @@ def logout_page(request):
 @unauthenticated_user
 def register_page(request):
     form = CreateUserForm()
-    context = {'form': form}
     
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -58,16 +57,11 @@ def register_page(request):
             user = form.save()
             username = form.cleaned_data.get('username')
 
-            # add user to customer group
-            group = Group.objects.get(name='customer')
-            user.groups.add(group)
-
-            # create the customer attached to the created now
-            Customer.objects.create(user=user)
-
             messages.success(request, 'Your account was created ', username)
 
             return redirect('account_login')
+
+    context = {'form': form}
 
     return render(request, 'account/register.html', context)
 
