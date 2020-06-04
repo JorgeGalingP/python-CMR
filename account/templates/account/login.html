@@ -63,7 +63,10 @@
 
                             <input class="btn btn-primary btn-block btn-sm" type="submit" name="Submit" value="Login">
 
-                            <p>Don't have an account? <a href="{% url 'account_register' %}">Sign Up</a></p>
+                            <br>
+
+                            <p class="float-left">Don't have an account? <a href="{% url 'account_register' %}">Sign Up</a></p>
+                            <p class="float-right">Forget your password? <a href="{% url 'account_password_reset' %}">Reset</a></p>
                         </form>
                     </div>
                 </div>
