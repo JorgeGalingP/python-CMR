@@ -130,3 +130,6 @@ dmypy.json
 
 # Django database migrations
 /account/migrations
+
+# Django settings
+cmr/settings.py
