@@ -143,3 +143,13 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'youremail@gmail.com'
 EMAIL_HOST_PASSWORD = 'emailPassword'
+
+# S3 Bucket Config
+AWS_ACCESS_KEY_ID = 'XXXXXXXX'
+AWS_SECRET_ACCESS_KEY = 'XXXXXXXX'
+AWS_STORAGE_BUCKET_NAME = 'XXXXXXXX'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
